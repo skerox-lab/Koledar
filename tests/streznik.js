@@ -44,7 +44,7 @@ async function run(browser, url) {
 
   // 3. prijava z začasnim geslom → menjava gesla
   const M = await L.open(browser, 'new', url, { login: false });
-  await M.waitForSelector('#lgu');
+  await M.waitForSelector('#lgu'); await M.waitForTimeout(300);
   await M.fill('#lgu', 'matej@montaza-skerjanec.si'); await M.fill('#lgp', 'napacno-geslo');
   await M.click('#login button[type=submit]');
   await M.waitForTimeout(400);
@@ -103,6 +103,23 @@ async function run(browser, url) {
   r = await api(adminCookie, 'api/state', { method: 'PUT', body: { keys: { PLEG: { v: s1.j.state.PLEG, base } }, objs: {}, del: {} } });
   const r2 = await api(adminCookie, 'api/state', { method: 'PUT', body: { keys: { PLEG: { v: s1.j.state.PLEG, base } }, objs: {}, del: {} } });
   ok('Hkratna sprememba istega podatka: drugi zapis dobi 409 (ne prepiše)', r.status === 200 && r2.status === 409, `${r.status}, nato ${r2.status}`);
+
+  // 7b. hkratno urejanje v brskalniku: drugi dobi okno in osvežene podatke
+  const A2 = await L.open(browser, 'new', url, { user: 'nejc@montaza-skerjanec.si', password: 'Admin-geslo-1' });
+  await A.evaluate(() => { menuGo('plan'); });
+  await A2.evaluate(() => { menuGo('plan'); });
+  let cA = A2.locator('input[aria-label="Luka sre 14"]'); await cA.fill('HK 8'); await cA.press('Tab');
+  await A2.waitForTimeout(800);
+  cA = A.locator('input[aria-label="Jure čet 15"]'); await cA.fill('WC 8'); await cA.press('Tab');
+  await A.waitForSelector('.uiask-b', { timeout: 10000 });
+  const msg = await A.locator('.uiask-b > div').first().innerText();
+  let dialog = false; A.on('dialog', d => { dialog = true; d.dismiss(); });
+  await Promise.all([A.waitForNavigation(), A.click('.uiask-y')]);
+  await A.waitForSelector('#view h1');
+  await A.evaluate(() => { menuGo('plan'); });
+  const luka = await A.locator('input[aria-label="Luka sre 14"]').inputValue();
+  ok('Hkratno urejanje v brskalniku: okno, osvežitev, vidi spremembo drugega', /spremenil drug uporabnik/.test(msg) && luka === 'HK 8' && !dialog, msg.split('\n')[0] + ' → po osvežitvi Luka sre 14 = ' + luka + (dialog ? ' (NEŽELENO vprašanje brskalnika)' : ''));
+  await A2.context().close();
 
   // 8. administracija: sebe in zadnjega administratorja ni mogoče izbrisati
   const us = (await api(adminCookie, 'api/state')).j.state.USERS;

@@ -62,7 +62,7 @@ window.MSD = (function () {
     pending = o;
     if (!inflight) setTimeout(flush, 0);
   };
-  M.dirty = () => !!pending || inflight;
+  M.dirty = () => !stopped && (!!pending || inflight); // po ustavitvi (napaka, osvežitev) ni več česa shraniti
   async function flush() {
     if (inflight || !pending || stopped) return;
     const o = pending; pending = null;
