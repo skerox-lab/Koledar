@@ -114,6 +114,9 @@ patch('app', 'Administracija: Ponastavi geslo zares, dodan gumb Nastavi geslo',
   `<button class="sm" onclick="toast('Uporabnik \${r[0].replace(/'/g,'')} bo ob naslednji prijavi nastavil novo geslo')">Ponastavi geslo</button> `,
   `\${MSD.dev?\`<button class="sm" onclick="toast('Uporabnik \${r[0].replace(/'/g,'')} bo ob naslednji prijavi nastavil novo geslo')">Ponastavi geslo</button> \`:\`<button class="sm" onclick="MSD.pwReset(\${i})">Ponastavi geslo</button> <button class="sm" onclick="MSD.pwSet(\${i})">Nastavi geslo</button> \`}`);
 
+patch('app', 'PDEF (vzorčni podatki partnerjev) ne velja več, ko je vzorec odstranjen (npm run odstrani-vzorec)',
+  'const PDEF={', 'const PDEF=(MSD.state&&MSD.state._brezVzorca)?{}:{');
+
 // Arhiv cen za Poročila: podatek ostane na strežniku, dobita ga samo direktor in administrator.
 const mR = app.match(/const RPARCH=(\[.*?\]\]);/);
 if (!mR) throw new Error('Ne najdem RPARCH');

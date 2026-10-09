@@ -85,7 +85,7 @@ function getState(user) {
     if (c.boss) { st.USERS = usersRows(); st.AUDIT = auditRows(); }
     else { delete st.USERS; st.AUDIT = []; }
   }
-  delete vers.keys.USERS; delete vers.keys.AUDIT;
+  if (!c.dev) { delete vers.keys.USERS; delete vers.keys.AUDIT; }
   if (c.dev && st.USERS === undefined) st.USERS = null;
   // objekti
   st.OBJ = {};
@@ -104,6 +104,7 @@ function getState(user) {
   const d = (st.OBJ[cur] && st.OBJ[cur].d) || DATAK_EMPTY();
   DATAK.forEach(k => { st[k] = d[k] !== undefined ? d[k] : DATAK_EMPTY()[k]; });
   st._full = true;
+  if (meta.get('brez_vzorca')) st._brezVzorca = true;
   return { state: st, vers, rparch: c.boss ? RPARCH : null };
 }
 
@@ -335,7 +336,7 @@ function addAudit(user, kje, kaj) {
 function devReset() {
   tx(() => {
     for (const t of ['state', 'objekti', 'user_state', 'files', 'audit', 'changes']) q('DELETE FROM ' + t).run();
-    meta.del('seeded');
+    meta.del('seeded'); meta.del('brez_vzorca');
   });
   fs.rmSync(FILES_DIR(), { recursive: true, force: true });
 }

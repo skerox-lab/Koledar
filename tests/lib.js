@@ -34,6 +34,7 @@ async function open(browser, kind, base, opt) {
   page.__errors = [];
   page.on('pageerror', e => page.__errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') page.__errors.push(m.text()); });
+  page.on('response', async r => { if (r.status() === 409 || r.status() >= 500) { try { page.__errors.push(r.status() + ' ' + r.url() + ' ' + (await r.text()).slice(0, 300)); } catch (e) { } } });
   if (kind === 'proto') {
     await ctx.addInitScript(PROTO_INIT);
     // Google pisave: v testu iz lokalne kopije (iste datoteke kot v novi aplikaciji)

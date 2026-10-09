@@ -243,7 +243,10 @@ window.MSD = (function () {
     }
     s = s.j;
     M.dev = !!s.dev;
-    if (!M.dev) { const sel = document.getElementById('role'); if (sel) sel.style.display = 'none'; }
+    if (!M.dev) { // namesto spustnega seznama za menjavo vloge (samo razvojni način) ime prijavljenega
+      const sel = document.getElementById('role');
+      if (sel) { sel.style.display = 'none'; if (s.user) { const n = document.createElement('span'); n.className = 'small'; n.style.fontWeight = '500'; n.textContent = s.user.name; sel.after(n); } }
+    }
     if (s.setup) { setupScreen(); return; }
     if (s.user) {
       if (s.user.mustChange) { pwScreen(s.user); return; }

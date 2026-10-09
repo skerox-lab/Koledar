@@ -34,4 +34,5 @@ Samodejno ustvarjeno z `npm run build` iz `scripts/build-frontend.js`. To so VSE
 | 28 | app.js | nova ponudba: vodja = prijavljeni uporabnik (dSave) | 1 |
 | 29 | app.js | nova ponudba: vodja = prijavljeni uporabnik (dSend) | 1 |
 | 30 | app.js | Administracija: Ponastavi geslo zares, dodan gumb Nastavi geslo | 1 |
-| 31 | app.js | RPARCH: arhiv cen s strežnika (samo direktor in administrator) | 1 |
+| 31 | app.js | PDEF (vzorčni podatki partnerjev) ne velja več, ko je vzorec odstranjen (npm run odstrani-vzorec) | 1 |
+| 32 | app.js | RPARCH: arhiv cen s strežnika (samo direktor in administrator) | 1 |

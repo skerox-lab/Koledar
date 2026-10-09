@@ -128,6 +128,12 @@ app.post('/api/users/:id/password', auth.requireUser, auth.requireBoss, json, wr
 // ---------------------------------------------------------------- integracije (zaenkrat kot v prototipu)
 app.get('/api/integracije', auth.requireUser, wrap(() => integracije.stanje()));
 
+app.get('/api/varnostne-kopije', auth.requireUser, auth.requireBoss, wrap(() => {
+  const b = require('./backup'), fs = require('fs');
+  const d = b.dir();
+  return fs.existsSync(d) ? fs.readdirSync(d).filter(n => n.endsWith('.db')).sort().reverse().map(n => ({ datoteka: n, velikost: fs.statSync(path.join(d, n)).size })) : [];
+}));
+
 // ---------------------------------------------------------------- razvojni način
 if (config.dev) app.post('/api/dev/reset', wrap(() => { st.devReset(); return { ok: true }; }));
 
@@ -142,6 +148,7 @@ app.use(express.static(PUB, { index: 'index.html', setHeaders: res => res.setHea
 app.use('/ceniki', auth.requireUser, express.static(path.join(__dirname, '..', 'prototip', 'ceniki')));
 
 if (require.main === module) {
+  require('./backup').start();
   app.listen(config.port, () => {
     console.log(`Montaža Škerjanec Digital teče na http://localhost:${config.port}` + (config.dev ? '  (RAZVOJNI NAČIN – ne uporabljaj za prave podatke)' : ''));
     console.log('Podatki: ' + config.dataDir);

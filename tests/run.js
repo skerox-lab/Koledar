@@ -11,6 +11,7 @@ const express = require('express');
 const { S, L } = require('./scenariji');
 const posnetki = require('./posnetki');
 const streznik = require('./streznik');
+const skripte = require('./skripte');
 
 const ROOT = path.join(__dirname, '..');
 const OUT = path.join(__dirname, 'out');
@@ -72,16 +73,17 @@ async function main() {
     let shotRows = [];
     if (want('posnetki')) shotRows = await posnetki.run(browser, proto.url, dev.url, devReset, OUT);
     let srvRows = [];
+    if (want('skripte')) srvRows = srvRows.concat(await skripte.run(browser, proto.url, dev.url, devReset, path.join(OUT, 'data-dev'), OUT));
     if (want('streznik')) {
       const prod = await startNew(false);
-      try { srvRows = await streznik.run(browser, prod.url); } finally { prod.ch.kill(); }
+      try { srvRows = srvRows.concat(await streznik.run(browser, prod.url)); } finally { prod.ch.kill(); }
     }
     const shotFail = shotRows.filter(r => !r.same).length, srvFail = srvRows.filter(r => !r.ok).length;
     const md = `# Rezultat preverjanja (samodejno, ${new Date().toISOString().slice(0, 16).replace('T', ' ')})\n\n` +
       `Prototip: \`prototip/index.html\` (v178). Nova aplikacija: razvojni način (enaki začetni podatki kot prototip), datum v brskalniku ${L.TODAY}.\n\n` +
       (rows.length ? `## Scenariji iz PREVERJANJE.md\n\n| Scenarij | Prototip | Nova aplikacija | Enako (da/ne) |\n|---|---|---|---|\n${rows.join('\n')}\n\n` : '') +
       (shotRows.length ? `## Posnetki zaslona (1400 × 900, cela stran), ${shotRows.length - shotFail}/${shotRows.length} enakih\n\n| Vloga | Stran | Razlika (piksli) | Enako |\n|---|---|---|---|\n${shotRows.map(r => `| ${r.role} | ${esc(r.name)} | ${r.diff}${r.note ? ' ' + esc(r.note) : ''} | ${r.same ? 'da' : '**NE**'} |`).join('\n')}\n\n` : '') +
-      (srvRows.length ? `## Prava prijava in pravice na strežniku (samo nova aplikacija)\n\n| Preverjanje | Rezultat | OK |\n|---|---|---|\n${srvRows.map(r => `| ${esc(r.name)} | ${esc(r.got)} | ${r.ok ? 'da' : '**NE**'} |`).join('\n')}\n\n` : '') +
+      (srvRows.length ? `## Prava prijava, pravice na strežniku in skripte (samo nova aplikacija)\n\n| Preverjanje | Rezultat | OK |\n|---|---|---|\n${srvRows.map(r => `| ${esc(r.name)} | ${esc(r.got)} | ${r.ok ? 'da' : '**NE**'} |`).join('\n')}\n\n` : '') +
       (detail.length ? `## Podrobnosti scenarijev\n\n${detail.join('\n')}` : '');
     fs.writeFileSync(path.join(OUT, 'REZULTAT.md'), md);
     console.log(`\nScenariji z razliko: ${fail}, posnetki z razliko: ${shotFail}, strežnik napak: ${srvFail}\nRezultat: tests/out/REZULTAT.md`);
