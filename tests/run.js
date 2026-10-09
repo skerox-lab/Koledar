@@ -51,7 +51,8 @@ async function main() {
     for (const s of S) {
       if (only.length && !only.includes('scenariji') && !only.includes(s.id)) continue;
       const res = {};
-      for (const kind of ['proto', 'new']) {
+      if (s.samoNova) res.proto = '(' + s.samoNova + ')';
+      for (const kind of (s.samoNova ? ['new'] : ['proto', 'new'])) {
         let page;
         try {
           if (kind === 'new') await devReset(dev.url);
@@ -62,11 +63,11 @@ async function main() {
           res[kind] = 'NAPAKA TESTA: ' + (e.message || e).split('\n')[0];
         } finally { if (page) await page.context().close(); }
       }
-      const same = res.proto === res.new;
-      const miss = k => s.pricakovano.filter(x => !res[k].includes(x));
+      const same = s.samoNova ? true : res.proto === res.new;
+      const miss = k => (s.samoNova && k === 'proto') ? [] : s.pricakovano.filter(x => !res[k].includes(x));
       const mp = miss('proto'), mn = miss('new');
       if (!same || mn.length) fail++;
-      rows.push(`| ${s.id} ${esc(s.opis)} | ${mp.length ? '⚠️ ne vsebuje: ' + esc(mp.join(', ')) : 'pričakovano ✓'} | ${mn.length ? '⚠️ ne vsebuje: ' + esc(mn.join(', ')) : 'pričakovano ✓'} | ${same ? 'da' : '**NE**'} |`);
+      rows.push(`| ${s.id} ${esc(s.opis)} | ${mp.length ? '⚠️ ne vsebuje: ' + esc(mp.join(', ')) : 'pričakovano ✓'} | ${mn.length ? '⚠️ ne vsebuje: ' + esc(mn.join(', ')) : 'pričakovano ✓'} | ${s.samoNova ? 'namerno drugače' : same ? 'da' : '**NE**'} |`);
       detail.push(`### ${s.id} – ${s.opis}\n\nPričakovano (PREVERJANJE.md): ${s.pricakovano.map(x => '`' + x.replace(/\n/g, '⏎').replace(/\t/g, '⇥') + '`').join(', ')}\n\n**Prototip:**\n\n\`\`\`\n${res.proto}\n\`\`\`\n\n` + (same ? '**Nova aplikacija:** enako kot prototip.\n' : `**Nova aplikacija:**\n\n\`\`\`\n${res.new}\n\`\`\`\n`));
       console.log(`${same && !mn.length ? 'OK  ' : 'RAZL'} ${s.id} ${s.opis}`);
     }

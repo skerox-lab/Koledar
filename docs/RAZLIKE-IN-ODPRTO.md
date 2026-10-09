@@ -29,7 +29,9 @@ Popoln seznam sprememb kode je v [`POPRAVKI-PROTOTIPA.md`](POPRAVKI-PROTOTIPA.md
 | 14 | Vodja projekta | prejme vse podatke, skrije jih brskalnik | strežnik pošlje samo njegove objekte, ponudbe in datoteke; tuj objekt ali datoteka vrne 403 | SPECIFIKACIJA 3 |
 | 15 | Vodja, računovodstvo | – | ne prejmeta uporabnikov, sledi sprememb, koša, napak in predlogov ter arhiva cen za Poročila; v koš in med predloge lahko samo dodajata | SPECIFIKACIJA 3 |
 | 16 | Izbris datoteke | izbris iz brskalnika | datoteka gre v `data/files/_izbrisano/<datum>/`, ne izbriše se dokončno | varnost |
-| 17 | Po `odstrani-vzorec` | – | vzorčni podatki partnerjev (PDEF) se ne prikazujejo več | SPECIFIKACIJA 1 |
+| 17 | Nova ponudba › Naročnik | sam Enter ne izbere predloga, potrebna je puščica dol + Enter | **sam Enter izbere prvi predlog**, puščice in klik delujejo kot prej | odločitev 9. 10. 2026 (PREVERJANJE F1) |
+| 18 | Naslov zavihka | »Montaža Škerjanec Digital · vzorec« | »Montaža Škerjanec Digital« | odločitev 9. 10. 2026 |
+| 19 | Po `odstrani-vzorec` | – | vzorčni podatki partnerjev (PDEF) se ne prikazujejo več | SPECIFIKACIJA 1 |
 
 ## 2. Razlike, ki jih uporabnik ne vidi
 
@@ -42,12 +44,11 @@ Popoln seznam sprememb kode je v [`POPRAVKI-PROTOTIPA.md`](POPRAVKI-PROTOTIPA.md
 
 | Kaj | Stanje | Kaj potrebujem |
 |---|---|---|
-| Outlook (Microsoft Graph) | simulirano kot v prototipu | službeni Microsoft 365 + registracija aplikacije v Entra ID; odločitev o GDPR za povzetke |
+| Outlook (Microsoft Graph) | simulirano kot v prototipu | Azure račun obstaja. Potrebna je registracija aplikacije v Entra ID (Directory/tenant ID, Application/client ID, client secret, preusmeritveni naslov) in odločitev o GDPR za AI povzetke |
 | Predlogi naročnika iz AJPES/FURS | iz znanih podatkov kot v prototipu | potrditev, da gremo na brezplačni seznam FURS; preveril bom format |
 | Bizi | samo povezava na kartici partnerja | odločitev o naročnini |
 | Izvoz VASCO | CSV kot v prototipu | primer uvozne datoteke iz VASCO |
 | Administracija › Povezave in stanje | prikazuje vzorčne vrednosti iz prototipa (»Prostor na disku 78 %«, »vzorec 0.3«) | strežnik že ima seznam varnostnih kopij (`/api/varnostne-kopije`), prikaz še ni povezan |
-| Naslov zavihka | »Montaža Škerjanec Digital · vzorec« | ali odstranim »· vzorec«? |
 | Docker slika | Dockerfile napisan; enaki koraki ročno preverjeni (`npm ci --omit=dev`, zagon, prijava) | Docker Hub v testnem okolju ni bil dosegljiv (omejitev 429), zato slike nisem zgradil; zgradi jo Synology |
 | Model Synologyja | ni znan | podatki iz Informacijskega centra, glej `NAMESTITEV-SYNOLOGY.md` |
 | Uvoz datotek iz prototipa | izvoz localStorage vsebuje podatke, ne datotek (IndexedDB) | datoteke naložiti znova ali dodatna skripta |
@@ -65,10 +66,8 @@ Popoln seznam sprememb kode je v [`POPRAVKI-PROTOTIPA.md`](POPRAVKI-PROTOTIPA.md
 5. VASCO: sedanji CSV.
 6. Bizi: brez naročnine.
 
-## 5. Kje se prototip razlikuje od besedila v PREVERJANJE.md / SPECIFIKACIJA.md
+## 5. Odločeno pri razlikah med prototipom in PREVERJANJE.md (9. 10. 2026)
 
-Nova aplikacija se obnaša enako kot prototip. Prosim za potrditev, kaj je pravilno.
-
-1. **PREVERJANJE B1** »Σ vrstice +8«: Marko ima v torek že `WC` (8 ur), zato Σ ostane 40.
-2. **PREVERJANJE E1**: po potrditvi dodatne ponudbe črta ostane »0 % po ponudbi …«, dokler v situaciji ni vpisanih količin.
-3. **PREVERJANJE F1** »Enter → naslov«: sam Enter predloga ne izbere. Potrebna je puščica dol + Enter (ali klik), kot piše v SPECIFIKACIJA 5.
+1. **B1**: velja prototip. Σ ostane 40, ker je imel Marko v torek že 8 ur. Program je pravilen, besedilo testa je bilo napačno.
+2. **E1**: velja prototip. Črta kaže izvedeni delež dodatne ponudbe, zato je po potrditvi 0 %, dokler ni vpisanih količin.
+3. **F1**: spremenjeno. Sam Enter izbere prvi predlog (glej tabelo zgoraj, vrstica 17).

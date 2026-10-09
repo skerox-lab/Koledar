@@ -56,6 +56,8 @@ for (const [lib, file] of [
     `<script src="https://cdnjs.cloudflare.com/ajax/libs/${lib}${file}"></script>`,
     `<script src="vendor/${file}"></script>`);
 }
+patch('head', 'naslov zavihka brez »· vzorec« (odločitev 9. 10. 2026)',
+  '<title>Montaža Škerjanec Digital · vzorec</title>', '<title>Montaža Škerjanec Digital</title>');
 patch('head', 'Odjava gre na strežnik',
   `<button class="sm" onclick="try{sessionStorage.removeItem('msd-login')}catch(x){}window._li=false;render()">Odjava</button>`,
   `<button class="sm" onclick="MSD.logout()">Odjava</button>`);
@@ -116,6 +118,10 @@ patch('app', 'Administracija: Ponastavi geslo zares, dodan gumb Nastavi geslo',
 
 patch('app', 'PDEF (vzorčni podatki partnerjev) ne velja več, ko je vzorec odstranjen (npm run odstrani-vzorec)',
   'const PDEF={', 'const PDEF=(MSD.state&&MSD.state._brezVzorca)?{}:{');
+
+patch('app', 'Naročnik: Enter brez puščice izbere prvi predlog (odločitev 9. 10. 2026, PREVERJANJE F1)',
+  "else if(ev.key==='Enter'&&window._narI>=0){ev.preventDefault();narPick(window._narI)}",
+  "else if(ev.key==='Enter'){ev.preventDefault();narPick(window._narI>=0?window._narI:0)}");
 
 // Arhiv cen za Poročila: podatek ostane na strežniku, dobita ga samo direktor in administrator.
 const mR = app.match(/const RPARCH=(\[.*?\]\]);/);

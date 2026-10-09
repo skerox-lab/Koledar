@@ -72,7 +72,7 @@ v razvojnem načinu (podatki na strežniku, menjava vloge v glavi kot v prototip
 | E2 Dokumenti | 01 Dobavitelji … 04 Gradbena knjiga … 16 Zapisniki | enako | da |
 | E3 Moji objekti | stolpci Objekt, Vodja, Pogodba, Obračunano, Izvedeno; brez Izid | enako | da |
 | E4 Naložena dobavnica (dodatno) | strošek materiala 1.234,56, datoteka ostane | enako, datoteka na strežniku v `files/sencur/06/` | da |
-| F1 `gra` | predlog SGP Graditelj d.d. · Maistrova ulica 7, 1241 Kamnik; izbira s puščico + Enter (³) | enako | da |
+| F1 `gra` | predlog SGP Graditelj d.d. · Maistrova ulica 7, 1241 Kamnik; izbira s puščico + Enter | enako; **sam Enter izbere prvi predlog** (³) | da / namerno |
 | F2 `kalc` | Kalcer d.o.o. · info@kalcer.si | enako | da |
 | F3 Excel z listom Ponudba in popisom | 3 postavke samo iz popisa, 0 iz lista Ponudba | enako | da |
 | G1 Računovodstvo › Poročila | »Nimaš dovoljenega dostopa …«, Moji objekti | enako | da |
@@ -80,8 +80,8 @@ v razvojnem načinu (podatki na strežniku, menjava vloge v glavi kot v prototip
 | G3 Administracija | (prototip: simulirano) | urejanje vloge, izbris; sebe in zadnjega administratorja ni mogoče izbrisati (preveri tudi strežnik) | nova: da |
 | X Ostali izvozi (dodatno) | situacija, stroški, obračun kooperanta, VASCO CSV, plan, ure CSV, poročila | enaka imena datotek, celice, CSV, odtis PDF | da |
 
-Opombe – kjer se prototip razlikuje od besedila v PREVERJANJE.md (nova aplikacija se obnaša enako kot prototip):
+Opombe (odločeno 9. 10. 2026: »naredi tako, da bo smiselno in enostavno«):
 
-1. **B1 »Σ vrstice +8«**: Marko ima v torek 13. 10. že `WC` (8 ur). Vpis `wc 6 r-wc 2` je spet 8 ur, zato Σ ostane 40. +8 bi bilo pri prazni celici.
-2. **E1**: po potrditvi dodatne ponudbe črta ostane »0 % po ponudbi 0533/2026«, dokler v situaciji niso vpisane količine teh postavk. Postavke se pojavijo v Situacijah pod »Dodatna dela · ponudba 0533/2026«.
-3. **F1 »Enter → naslov«**: v prototipu sam Enter predloga ne izbere. Izbere ga puščica dol + Enter ali klik (besedilo `SPECIFIKACIJA.md` 5: »puščice + Enter«).
+1. **B1 »Σ vrstice +8«**: velja prototip. Marko ima v torek 13. 10. že `WC` (8 ur). `wc 6 r-wc 2` je spet 8 ur (6 + 2 režije), zato Σ ostane 40. Σ se poveča za 8 samo, če vpišeš v prazno celico. Besedilo testa je bilo napačno, program je pravilen.
+2. **E1 nova črta »x % po ponudbi …«**: velja prototip. Črta pokaže, koliko dodatne ponudbe je **izvedeno**. Po potrditvi je 0 %, dokler v situaciji ne vpišeš količin teh postavk. Postavke se ob potrditvi prenesejo v Situacije pod »Dodatna dela · ponudba 0533/2026«.
+3. **F1 »Enter → naslov«**: spremenjeno, kot piše v PREVERJANJE. Sam **Enter izbere prvi predlog** in izpolni naslov in e-pošto. Puščice in klik delujejo kot prej. V prototipu je bila potrebna puščica dol + Enter. Preverjeno s testom F1b.

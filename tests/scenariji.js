@@ -70,7 +70,7 @@ function writeTmp(name, buf) { fs.mkdirSync(path.join(OUT, 'tmp'), { recursive: 
 
 // ---------------------------------------------------------------- scenariji
 const S = [];
-const sc = (id, opis, pricakovano, run) => S.push({ id, opis, pricakovano, run });
+const sc = (id, opis, pricakovano, run, opt) => S.push(Object.assign({ id, opis, pricakovano, run }, opt || {}));
 
 sc('B1', 'Plan: Marko torek »wc 6 r-wc 2«', ['WC 6 R-WC 2'], async p => {
   await L.go(p, 'plan');
@@ -236,7 +236,7 @@ sc('F1-2', 'Nova ponudba: predlogi naročnika »gra«, »kalc«', ['puščica + 
   const s2 = (await p.locator('#narBox').innerText()).trim();
   await p.keyboard.press('ArrowDown'); await p.keyboard.press('Enter'); await L.settle(p);
   const a2 = `${await p.locator('#narIn').inputValue()} | ${await p.locator('#narAdr').inputValue()} | ${await p.locator('#narMail').inputValue()}`;
-  return `gra → predlogi: ${s1.replace(/\n/g, ' / ')}\n${e1}\npuščica + Enter: ${a1}\nkalc → predlogi: ${s2.replace(/\n/g, ' / ')}\npuščica + Enter: ${a2}`;
+  return `gra → predlogi: ${s1.replace(/\n/g, ' / ')}\npuščica + Enter: ${a1}\nkalc → predlogi: ${s2.replace(/\n/g, ' / ')}\npuščica + Enter: ${a2}`;
 });
 sc('F3', 'Excel z listom »Ponudba« in listom popisa → postavke samo iz popisa', ['postavk: 3', 'iz Ponudba: 0'], async p => {
   const wb = XLSX.utils.book_new();
@@ -276,6 +276,15 @@ sc('E4', 'Dokumenti: naložena dobavnica → strošek materiala, datoteka ostane
   const dl = id ? await L.captureDownload(p, () => p.evaluate(i => { dlF(i); }, id)) : null;
   return `datoteke: ${r1.files.join(', ')}\ndobavnica: ${r1.doba.join('')}\nstroški: ${mat}\npo osvežitvi prenesena enaka: ${dl && Buffer.compare(dl.buf, buf) === 0 ? 'da' : 'NE'} (${dl ? dl.name : 'ni datoteke'})`;
 });
+
+sc('F1b', 'Naročnik: sam Enter (brez puščice) izbere prvi predlog', ['SGP Graditelj d.d. | Maistrova ulica 7, 1241 Kamnik'], async p => {
+  await p.evaluate(() => { menuGo('povp'); DRAFT = null; novaPonudba(); });
+  await L.settle(p);
+  await p.click('#narIn'); await p.keyboard.type('gra');
+  await p.waitForTimeout(300);
+  await p.keyboard.press('Enter'); await L.settle(p);
+  return `${await p.locator('#narIn').inputValue()} | ${await p.locator('#narAdr').inputValue()} | ${await p.locator('#narMail').inputValue()}`;
+}, { samoNova: 'namerna sprememba: v prototipu sam Enter ne izbere ničesar' });
 
 // Ostali izvozi (imena datotek, Excel celice, PDF strani in orientacija, CSV vsebina)
 async function exp(p, label, fn, kind) {
