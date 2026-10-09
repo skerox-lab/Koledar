@@ -37,4 +37,7 @@ Samodejno ustvarjeno z `npm run build` iz `scripts/build-frontend.js`. To so VSE
 | 31 | app.js | Administracija: Ponastavi geslo zares, dodan gumb Nastavi geslo | 1 |
 | 32 | app.js | PDEF (vzorčni podatki partnerjev) ne velja več, ko je vzorec odstranjen (npm run odstrani-vzorec) | 1 |
 | 33 | app.js | Naročnik: Enter brez puščice izbere prvi predlog (odločitev 9. 10. 2026, PREVERJANJE F1) | 1 |
-| 34 | app.js | RPARCH: arhiv cen s strežnika (samo direktor in administrator) | 1 |
+| 34 | app.js | Outlook skrit: okno v mapi Korespondenca | 1 |
+| 35 | app.js | Outlook skrit: Korespondenca (objekti brez vzorčne pošte) | 1 |
+| 36 | app.js | Outlook skrit: Korespondenca Šenčur | 1 |
+| 37 | app.js | RPARCH: arhiv cen s strežnika (samo direktor in administrator) | 1 |

@@ -123,6 +123,18 @@ patch('app', 'Naročnik: Enter brez puščice izbere prvi predlog (odločitev 9.
   "else if(ev.key==='Enter'&&window._narI>=0){ev.preventDefault();narPick(window._narI)}",
   "else if(ev.key==='Enter'){ev.preventDefault();narPick(window._narI>=0?window._narI:0)}");
 
+// Outlook: dokler povezava ni narejena, v pravem načinu ni gumbov »Poveži Outlook« (odločitev 9. 10. 2026).
+// Gumb in stanje v glavi skrije msd.js. V razvojnem načinu ostane kot v prototipu.
+patch('app', 'Outlook skrit: okno v mapi Korespondenca',
+  '<b>Outlook ni povezan.</b> Poveži službeni Outlook, da program sam pripenja pošto udeležencev tega objekta (naročnik, vodja gradnje, projektant …) in prilog iz nje. Brez povezave lahko sporočila (.msg, .eml) dodaš ročno spodaj.<div style="margin-top:8px"><button class="pri" onclick="olToggle()">Poveži Outlook</button></div>',
+  '${MSD.dev?\'<b>Outlook ni povezan.</b> Poveži službeni Outlook, da program sam pripenja pošto udeležencev tega objekta (naročnik, vodja gradnje, projektant …) in prilog iz nje. Brez povezave lahko sporočila (.msg, .eml) dodaš ročno spodaj.<div style="margin-top:8px"><button class="pri" onclick="olToggle()">Poveži Outlook</button></div>\':\'Sporočila (.msg, .eml) dodaš ročno spodaj.\'}');
+patch('app', 'Outlook skrit: Korespondenca (objekti brez vzorčne pošte)',
+  'Outlook ni povezan. Poveži ga zgoraj ali shrani sporočila v Dokumenti → ${fL(\'11\')}.',
+  '${MSD.dev?\'Outlook ni povezan. Poveži ga zgoraj ali shrani\':\'Shrani\'} sporočila v Dokumenti → ${fL(\'11\')}.');
+patch('app', 'Outlook skrit: Korespondenca Šenčur',
+  'Outlook ni povezan, zato se pošta ne pripenja samodejno. <a style="cursor:pointer;text-decoration:underline" onclick="olToggle()">Poveži Outlook</a> ali shrani',
+  '${MSD.dev?\'Outlook ni povezan, zato se pošta ne pripenja samodejno. <a style="cursor:pointer;text-decoration:underline" onclick="olToggle()">Poveži Outlook</a> ali shrani\':\'Shrani\'}');
+
 // Arhiv cen za Poročila: podatek ostane na strežniku, dobita ga samo direktor in administrator.
 const mR = app.match(/const RPARCH=(\[.*?\]\]);/);
 if (!mR) throw new Error('Ne najdem RPARCH');

@@ -31,7 +31,8 @@ Popoln seznam sprememb kode je v [`POPRAVKI-PROTOTIPA.md`](POPRAVKI-PROTOTIPA.md
 | 16 | Izbris datoteke | izbris iz brskalnika | datoteka gre v `data/files/_izbrisano/<datum>/`, ne izbriše se dokončno | varnost |
 | 17 | Nova ponudba › Naročnik | sam Enter ne izbere predloga, potrebna je puščica dol + Enter | **sam Enter izbere prvi predlog**, puščice in klik delujejo kot prej | odločitev 9. 10. 2026 (PREVERJANJE F1) |
 | 18 | Naslov zavihka | »Montaža Škerjanec Digital · vzorec« | »Montaža Škerjanec Digital« | odločitev 9. 10. 2026 |
-| 19 | Po `odstrani-vzorec` | – | vzorčni podatki partnerjev (PDEF) se ne prikazujejo več | SPECIFIKACIJA 1 |
+| 19 | Outlook | gumb »Poveži Outlook« in stanje v glavi, poziv v Korespondenci (simulacija) | skrito, dokler povezava ni narejena; sporočila se dodajo ročno (.msg, .eml) | odločitev 9. 10. 2026: počakava z Outlookom |
+| 20 | Po `odstrani-vzorec` | – | vzorčni podatki partnerjev (PDEF) se ne prikazujejo več | SPECIFIKACIJA 1 |
 
 ## 2. Razlike, ki jih uporabnik ne vidi
 
@@ -44,7 +45,7 @@ Popoln seznam sprememb kode je v [`POPRAVKI-PROTOTIPA.md`](POPRAVKI-PROTOTIPA.md
 
 | Kaj | Stanje | Kaj potrebujem |
 |---|---|---|
-| Outlook (Microsoft Graph) | simulirano kot v prototipu | Azure račun obstaja. Potrebna je registracija aplikacije v Entra ID (Directory/tenant ID, Application/client ID, client secret, preusmeritveni naslov) in odločitev o GDPR za AI povzetke |
+| Outlook (Microsoft Graph) | odloženo; v pravem načinu skrito (vrstica 19) | Azure račun obstaja. Potrebna je registracija aplikacije v Entra ID (Directory/tenant ID, Application/client ID, client secret, preusmeritveni naslov) in odločitev o GDPR za AI povzetke |
 | Predlogi naročnika iz AJPES/FURS | iz znanih podatkov kot v prototipu | potrditev, da gremo na brezplačni seznam FURS; preveril bom format |
 | Bizi | samo povezava na kartici partnerja | odločitev o naročnini |
 | Izvoz VASCO | CSV kot v prototipu | primer uvozne datoteke iz VASCO |

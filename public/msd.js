@@ -245,6 +245,7 @@ window.MSD = (function () {
     M.dev = !!s.dev;
     if (!M.dev) { // namesto spustnega seznama za menjavo vloge (samo razvojni način) ime prijavljenega
       const sel = document.getElementById('role');
+      ['olbtn', 'sync'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; }); // Outlook še ni povezan
       if (sel) { sel.style.display = 'none'; if (s.user) { const n = document.createElement('span'); n.className = 'small'; n.style.fontWeight = '500'; n.textContent = s.user.name; sel.after(n); } }
     }
     if (s.setup) { setupScreen(); return; }
@@ -258,6 +259,7 @@ window.MSD = (function () {
         return;
       }
       M.state = st.j.state; M.rparch = st.j.rparch || null;
+      if (!M.dev && M.state && M.state.OUTLOOK) M.state.OUTLOOK = false; // Outlook še ni povezan (simulacija iz prototipa izklopljena)
       vers = st.j.vers || { keys: {}, objs: {} };
       provided = M.state && M.state._full ? new Set(Object.keys(M.state)) : null; // prvi zagon: shrani vse
       initLast(M.state);

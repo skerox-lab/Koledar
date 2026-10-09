@@ -24,6 +24,13 @@ async function run(browser, url) {
   await A.waitForSelector('#view h1', { timeout: 15000 });
   ok('Administrator ustvarjen in prijavljen, vidi Administracijo', (await A.locator('#nav').innerText()).includes('Administracija'), (await A.locator('#nav').innerText()).replace(/\n/g, ' / '));
   ok('Spustni seznam »Prijavljen:« v pravem načinu ni viden', !(await A.locator('#role').isVisible()), 'viden: ' + (await A.locator('#role').isVisible()));
+  await A.evaluate(() => { openObj('sencur'); tabGo('korespondenca'); });
+  const kor = await A.locator('#view').innerText();
+  await A.evaluate(() => { tabGo('dokumenti'); S.folder = '11'; render(); });
+  const dok = await A.locator('#view').innerText();
+  const olVis = await A.locator('#olbtn').isVisible() || await A.locator('#sync').isVisible();
+  ok('Outlook skrit v pravem načinu (glava, Korespondenca, Dokumenti)', !olVis && !/Poveži Outlook/.test(kor + dok), `glava ${olVis ? 'vidna' : 'skrita'}, »Poveži Outlook« ${/Poveži Outlook/.test(kor + dok) ? 'najden' : 'ni najden'}`);
+  await A.evaluate(() => { menuGo('objekti'); });
   await A.waitForTimeout(1000);
   const ac = (await A.context().cookies())[0];
   const adminCookie = ac.name + '=' + ac.value;
