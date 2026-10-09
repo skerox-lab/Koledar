@@ -256,7 +256,7 @@ window.MSD = (function () {
       }
       M.state = st.j.state; M.rparch = st.j.rparch || null;
       vers = st.j.vers || { keys: {}, objs: {} };
-      provided = M.state ? new Set(Object.keys(M.state)) : null;
+      provided = M.state && M.state._full ? new Set(Object.keys(M.state)) : null; // prvi zagon: shrani vse
       initLast(M.state);
     }
     loadApp();

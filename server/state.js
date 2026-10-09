@@ -70,7 +70,8 @@ function getState(user) {
   const c = ctx(user);
   if (!meta.get('seeded')) {
     if (!c.boss) throw new HttpError(503, 'Program še ni pripravljen. Najprej se mora prijaviti administrator.');
-    return { state: null, vers: { keys: {}, objs: {} }, rparch: RPARCH };
+    // Prvi zagon: brez shranjenih podatkov aplikacija pokaže vzorec iz prototipa; uporabniki so že pravi.
+    return { state: c.dev ? null : { USERS: usersRows(), AUDIT: auditRows() }, vers: { keys: {}, objs: {} }, rparch: RPARCH };
   }
   const st = {}, vers = { keys: {}, objs: {} };
   const ids = visibleObjIds(c);
@@ -145,8 +146,8 @@ function syncUsers(c, rows) {
   }
   const names = final.map(u => u.username);
   if (new Set(names).size !== names.length) throw new HttpError(400, 'Uporabniško ime že obstaja');
-  if (!final.some(u => /administrator/.test(u.role))) throw new HttpError(400, 'Ostati mora vsaj en administrator');
   if (!keep.has(c.user.id)) throw new HttpError(400, 'Samega sebe ne moreš izbrisati');
+  if (!final.some(u => /administrator/.test(u.role))) throw new HttpError(400, 'Ostati mora vsaj en administrator');
   const temp = [], renames = [];
   for (const u of cur) if (!keep.has(u.id)) { q('DELETE FROM sessions WHERE user_id=?').run(u.id); q('DELETE FROM user_state WHERE user_id=?').run(u.id); q('DELETE FROM users WHERE id=?').run(u.id); }
   for (const u of final) {
@@ -194,8 +195,8 @@ function putState(user, body) {
     for (const [id, { v, base }] of Object.entries(objs)) {
       if (!v || typeof v !== 'object') throw new HttpError(400, 'Napačni podatki objekta');
       const row = q('SELECT vodja, ver, updated_by FROM objekti WHERE id=?').get(id);
-      if ((row ? row.ver : 0) !== (base || 0)) { conflicts.push({ key: 'OBJ:' + id, who: row && row.updated_by }); continue; }
       if (c.vodja && ((row && row.vodja !== user.name) || v.vodja !== user.name)) throw new HttpError(403, 'Ta objekt vodi ' + ((row && row.vodja) || v.vodja) + '. Spreminjaš lahko samo svoje objekte.');
+      if ((row ? row.ver : 0) !== (base || 0)) { conflicts.push({ key: 'OBJ:' + id, who: row && row.updated_by }); continue; }
       const s = JSON.stringify(v);
       if (row) q("UPDATE objekti SET value=?, vodja=?, ver=ver+1, updated_at=datetime('now'), updated_by=? WHERE id=?").run(s, v.vodja || null, who, id);
       else q('INSERT INTO objekti(id,pos,vodja,value,ver,updated_by) VALUES(?,?,?,?,1,?)').run(id, ++pos, v.vodja || null, s, who);
@@ -206,8 +207,8 @@ function putState(user, body) {
     for (const [id, base] of Object.entries(del)) {
       const row = q('SELECT vodja, ver, updated_by FROM objekti WHERE id=?').get(id);
       if (!row) continue;
-      if (row.ver !== (base || 0)) { conflicts.push({ key: 'OBJ:' + id, who: row.updated_by }); continue; }
       if (c.vodja && row.vodja !== user.name) throw new HttpError(403, 'Objekt lahko izbriše samo njegov vodja, direktor ali administrator');
+      if (row.ver !== (base || 0)) { conflicts.push({ key: 'OBJ:' + id, who: row.updated_by }); continue; }
       q('DELETE FROM objekti WHERE id=?').run(id);
       q('INSERT INTO changes(username,kind,key,ver,bytes) VALUES(?,?,?,?,?)').run(user.username, 'izbris objekta', id, row.ver, 0);
     }
@@ -220,7 +221,7 @@ function putState(user, body) {
       }
       if (!c.dev && k === 'AUDIT') continue;
       if (!c.dev && k === 'USERS') {
-        if (!c.boss) continue;
+        if (!c.boss || v == null) continue;
         Object.assign(out, syncUsers(c, v));
         continue;
       }
