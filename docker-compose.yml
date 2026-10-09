@@ -1,0 +1,18 @@
+# Zagon:  docker compose up -d --build
+# Podatki (baza, datoteke, varnostne kopije) so v mapi ./data poleg te datoteke.
+services:
+  msd:
+    build: .
+    image: montaza-skerjanec-digital:1.0
+    container_name: msd
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/data
+    environment:
+      TZ: Europe/Ljubljana
+      MSD_DEV: "0"              # NIKOLI 1 na pravem strežniku
+      MSD_SECURE_COOKIE: "0"    # 1, ko je pred aplikacijo HTTPS (Synology reverse proxy)
+      MSD_BACKUP_HOUR: "2"      # dnevna varnostna kopija baze ob 2:00
+      MSD_BACKUP_DAYS: "30"     # koliko dni hrani kopije
