@@ -1,0 +1,6 @@
+node_modules/
+data/
+data-dev/
+data-test*/
+tests/out/
+.env
