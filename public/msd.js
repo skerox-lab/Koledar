@@ -230,7 +230,7 @@ window.MSD = (function () {
     s.onload = () => {
       let just = false;
       try { just = sessionStorage.getItem('msd-justlogged') === '1'; sessionStorage.removeItem('msd-justlogged'); } catch (x) { }
-      if (just && M.loggedIn) toast('Prijavljen kot ' + M.user + (OUTLOOK ? ' · Outlook povezan' : ' · Outlook ni povezan'));
+      if (just && M.loggedIn) toast('Prijavljen kot ' + M.user + (!M.dev ? '' : OUTLOOK ? ' · Outlook povezan' : ' · Outlook ni povezan')); // Outlook je v pravem načinu skrit
     };
     document.body.appendChild(s);
   }
