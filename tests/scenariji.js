@@ -256,4 +256,67 @@ sc('G1', 'Računovodstvo odpre Poročila → obvestilo in Moji objekti', ['Nima�
   return `obvestilo: ${await toastText(p)}\nstran: ${await p.locator('#view h1').innerText()}\nmeni: ${(await p.locator('#nav').innerText()).replace(/\n/g, ' / ')}`;
 });
 
+sc('E4', 'Dokumenti: naložena dobavnica → strošek materiala, datoteka ostane po osvežitvi', ['po osvežitvi prenesena enaka: da', 'DOB-TEST-77'], async p => {
+  const { PDFDocument: PD, StandardFonts } = require('../public/vendor/pdf-lib.min.js');
+  const d = await PD.create(); const pg = d.addPage([595.28, 841.89]); const f = await d.embedFont(StandardFonts.Helvetica);
+  ['KALCER d.o.o., Ljubljanska cesta 51, 1236 Trzin', 'DOBAVNICA st. DOB-TEST-77', 'Datum: 8. 10. 2026', 'GKB plosce 12,5 mm, profili CW 75', 'Skupaj brez DDV: 1.234,56 EUR']
+    .forEach((t, i) => pg.drawText(t, { x: 50, y: 780 - i * 22, size: 12, font: f }));
+  const buf = Buffer.from(await d.save());
+  const file = writeTmp('Dobavnica DOB-TEST-77.pdf', buf);
+  await p.evaluate(() => { openObj('sencur'); tabGo('dokumenti'); S.upF = '06'; });
+  await p.setInputFiles('#upin', file);
+  await p.waitForTimeout(2500);
+  const r1 = await p.evaluate(() => ({ files: FILES.map(x => x.folder + ' ' + x.name), doba: DOBA.slice(0, 1).map(x => [x.dob, x.st, x.zn].join(' · ')) }));
+  await p.evaluate(() => { tabGo('stroski'); });
+  const mat = line(await L.text(p), /DOB-TEST-77|^Material/);
+  await p.waitForTimeout(800);
+  await reloadKeep(p);
+  await p.evaluate(() => { openObj('sencur'); tabGo('dokumenti'); });
+  const id = await p.evaluate(() => (FILES.find(x => /DOB-TEST-77/.test(x.name)) || {}).id);
+  const dl = id ? await L.captureDownload(p, () => p.evaluate(i => { dlF(i); }, id)) : null;
+  return `datoteke: ${r1.files.join(', ')}\ndobavnica: ${r1.doba.join('')}\nstroški: ${mat}\npo osvežitvi prenesena enaka: ${dl && Buffer.compare(dl.buf, buf) === 0 ? 'da' : 'NE'} (${dl ? dl.name : 'ni datoteke'})`;
+});
+
+// Ostali izvozi (imena datotek, Excel celice, PDF strani in orientacija, CSV vsebina)
+async function exp(p, label, fn, kind) {
+  const f = await L.captureDownload(p, () => p.evaluate(fn));
+  const info = /\.pdf$/i.test(f.name) ? await pdfInfo(f.buf) : /\.xlsx$/i.test(f.name) ? xlsxInfo(f.buf) : f.buf.toString('utf8');
+  return `## ${label}\n${f.name}\n${info}`;
+}
+sc('X1', 'Izvozi objekta: situacija, stroški, obračun kooperanta, računovodstvo (CSV)', ['.xlsx', '.pdf', '.csv'], async p => {
+  await p.evaluate(() => { openObj('sencur'); tabGo('situacije'); });
+  const o = [];
+  o.push(await exp(p, 'Situacija Excel', () => { expSitX(); }));
+  o.push(await exp(p, 'Situacija PDF', () => { expSitP(); }));
+  o.push(await exp(p, 'Izvoz za računovodstvo (CSV)', () => { expVasco(); }));
+  await p.evaluate(() => { tabGo('stroski'); });
+  o.push(await exp(p, 'Stroški Excel', () => { expStrX(); }));
+  o.push(await exp(p, 'Stroški PDF', () => { expStrP(); }));
+  await p.evaluate(() => { tabGo('podi'); });
+  o.push(await exp(p, 'Obračun kooperanta Excel', () => { kExpX(0); }));
+  o.push(await exp(p, 'Obračun kooperanta PDF', () => { kExpP(0); }));
+  o.push(await exp(p, 'Obračun kooperanta CSV', () => { kExpC(0); }));
+  return o.join('\n');
+});
+sc('X2', 'Izvozi plana in ur: Excel, CSV za računovodstvo, PDF teden/mesec', ['.xlsx', '.csv', '.pdf'], async p => {
+  await L.go(p, 'plan');
+  const o = [];
+  o.push(await exp(p, 'Plan Excel (teden)', () => { expPlanX(); }));
+  o.push(await exp(p, 'Ure CSV (teden)', () => { expUreC(); }));
+  o.push(await exp(p, 'Plan PDF (teden)', () => { expPlanP(); }));
+  await p.evaluate(() => { pView('m'); });
+  o.push(await exp(p, 'Plan Excel (mesec)', () => { expPlanX(); }));
+  o.push(await exp(p, 'Plan PDF (mesec)', () => { expPlanP(); }));
+  await p.evaluate(() => { pView('y'); });
+  o.push(await exp(p, 'Plan Excel (leto)', () => { expPlanX(); }));
+  return o.join('\n');
+});
+sc('X3', 'Izvozi poročil (direktor): Excel in PDF', ['.xlsx', '.pdf'], async p => {
+  await p.evaluate("setRole('direktor');menuGo('porocila')");
+  const o = [];
+  o.push(await exp(p, 'Poročila Excel', () => { expRepX(); }));
+  o.push(await exp(p, 'Poročila PDF', () => { expRepP(); }));
+  return o.join('\n');
+});
+
 module.exports = { S, L };

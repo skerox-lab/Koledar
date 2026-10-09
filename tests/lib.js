@@ -22,7 +22,8 @@ window.claude = { use: async (k) => k === 'downloads' ? { save: async ({ filenam
   window.__dl.push({ filename, b64: btoa(s) });
 } } : null };`;
 
-async function launch() { return pw.chromium.launch(); }
+// UTF-8 jezikovne nastavitve: brez njih Chromium v Linux vsebniku šumnike v imenu prenesene datoteke zamenja z »download«
+async function launch() { return pw.chromium.launch({ env: Object.assign({}, process.env, { LANG: 'C.UTF-8', LC_ALL: 'C.UTF-8' }) }); }
 
 // kind: 'proto' | 'new'; base: URL
 async function open(browser, kind, base, opt) {
