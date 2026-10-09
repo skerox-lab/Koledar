@@ -51,7 +51,7 @@ Popoln seznam sprememb kode je v [`POPRAVKI-PROTOTIPA.md`](POPRAVKI-PROTOTIPA.md
 | Izvoz VASCO | CSV kot v prototipu | primer uvozne datoteke iz VASCO |
 | Administracija › Povezave in stanje | prikazuje vzorčne vrednosti iz prototipa (»Prostor na disku 78 %«, »vzorec 0.3«) | strežnik že ima seznam varnostnih kopij (`/api/varnostne-kopije`), prikaz še ni povezan |
 | Docker slika | Dockerfile napisan; enaki koraki ročno preverjeni (`npm ci --omit=dev`, zagon, prijava) | Docker Hub v testnem okolju ni bil dosegljiv (omejitev 429), zato slike nisem zgradil; zgradi jo Synology |
-| Model Synologyja | ni znan | podatki iz Informacijskega centra, glej `NAMESTITEV-SYNOLOGY.md` |
+| Model Synologyja | DS224+ (podpira Container Manager) | namestitev po `NAMESTITEV-SYNOLOGY.md` |
 | Uvoz datotek iz prototipa | izvoz localStorage vsebuje podatke, ne datotek (IndexedDB) | datoteke naložiti znova ali dodatna skripta |
 | Sprotno osveževanje | spremembe drugih uporabnikov vidiš po osvežitvi strani | po potrebi kasneje |
 | Plan ekip je en podatek | če dva hkrati spreminjata plan, drugi dobi okno in vnos ponovi | po potrebi kasneje razdelim po monterjih |

@@ -2,6 +2,8 @@
 
 Za namestitev ne potrebuješ programerja. Potrebuješ administratorski dostop do Synology (DSM) in približno 30 minut.
 
+> **Naš strežnik: Synology DS224+** (Intel Celeron J4125, 64-bitni, 2 GB RAM, razširljivo na 6 GB). Podpira Container Manager, zato je spodnji postopek primeren. Korak 0 preskoči in samo v Centru za pakete namesti **Container Manager**.
+
 ## 0. Preveri, ali Synology zna poganjati Docker
 
 1. Prijavi se v Synology (DSM), na isti naslov kot vedno.
