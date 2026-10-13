@@ -1,6 +1,6 @@
 # Popravki prototipa v novi aplikaciji
 
-Samodejno ustvarjeno z `npm run build` iz `scripts/build-frontend.js`. To so VSE spremembe kode prototipa (v178, SHA-256 `681cc320424648f0a13617f36f9c267b8e37b7d5b31833b31d615c60ef0093df`). Vse ostalo je dobesedno enako.
+Samodejno ustvarjeno z `npm run build` iz `scripts/build-frontend.js`. To so VSE spremembe kode prototipa (v178, SHA-256 `b703f1a172d9a99c049d8d4fffac072675c64dd6148cf2b3a7fa73776c25ec49`). Vse ostalo je dobesedno enako.
 
 | # | Datoteka | Popravek | Zadetkov |
 |---|---|---|---|

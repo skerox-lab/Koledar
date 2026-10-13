@@ -14,7 +14,7 @@ const crypto = require('crypto');
 
 const ROOT = path.join(__dirname, '..');
 const SRC = path.join(ROOT, 'prototip', 'index.html');
-const SHA256 = '681cc320424648f0a13617f36f9c267b8e37b7d5b31833b31d615c60ef0093df'; // v200 (paket sprememb 1)
+const SHA256 = 'b703f1a172d9a99c049d8d4fffac072675c64dd6148cf2b3a7fa73776c25ec49'; // v200 + vsebina čez celo širino (13. 10. 2026)
 
 const raw = fs.readFileSync(SRC);
 const sha = crypto.createHash('sha256').update(raw).digest('hex');
