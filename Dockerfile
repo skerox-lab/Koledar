@@ -12,5 +12,5 @@ COPY prototip/ceniki ./prototip/ceniki
 VOLUME /data
 EXPOSE 8080
 HEALTHCHECK --interval=60s --timeout=5s CMD node -e "fetch('http://localhost:8080/api/session').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
-USER node
+# Teče kot root v vsebniku: mapo ./data na Synologyju ustvari Docker kot root, zato uporabnik »node« vanjo ne bi mogel pisati.
 CMD ["node", "--disable-warning=ExperimentalWarning", "server/index.js"]
