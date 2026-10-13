@@ -1,8 +1,8 @@
-node_modules/
-data/*
-!data/README.txt
-data-dev/
-data-test*/
-tests/out/
-.env
-data-preizkus/
+/node_modules/
+/data/*
+!/data/README.txt
+/data-dev/
+/data-test*/
+/data-preizkus/
+/tests/out/
+/.env
