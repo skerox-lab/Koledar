@@ -7,7 +7,7 @@ try { pw = require('playwright'); } catch (e) { pw = require(path.join(require('
 
 const ROOT = path.join(__dirname, '..');
 const FONTS_CSS = fs.readFileSync(path.join(ROOT, 'public', 'fonts', 'fonts.css'), 'utf8');
-const TODAY = '2026-10-09T10:00:00';
+const TODAY = '2026-10-13T10:00:00'; // PREVERJANJE-SPREMEMBE.md: danes je 13. 10. 2026
 
 // Prototip uporablja claude.use('downloads'); v testu ga nadomestimo, da ujamemo izvožene datoteke.
 const PROTO_INIT = `

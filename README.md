@@ -1,6 +1,6 @@
 # Montaža Škerjanec Digital
 
-Interna aplikacija Montaža Škerjanec d.o.o. To je prenos prototipa **v178** (`prototip/index.html`) na strežnik podjetja.
+Interna aplikacija Montaža Škerjanec d.o.o. To je prenos prototipa **v200** (`prototip/index.html`; v178 + paket sprememb 1 v `docs/paket-sprememb-1/`) na strežnik podjetja.
 Izgled, besedila, izračuni in povezave so iz prototipa. Zamenjano je samo shranjevanje: prej je bilo vse v
 brskalniku, zdaj je na strežniku (podatkovna baza + mapa z datotekami).
 
@@ -16,7 +16,7 @@ brskalniku, zdaj je na strežniku (podatkovna baza + mapa z datotekami).
 ### Zgradba
 
 ```
-prototip/              izvirni prototip v178 (EDINI VIR RESNICE) + Kalcer cenik PDF – ne spreminjaj
+prototip/              izvirni prototip v200 (EDINI VIR RESNICE) + Kalcer cenik PDF – ne spreminjaj
 scripts/build-frontend.js  iz prototipa naredi public/index.html in public/app.js (preveri SHA-256, uporabi popravke)
 public/
   index.html, app.js   ustvarjeno z `npm run build` – NE UREJAJ ROČNO

@@ -36,9 +36,12 @@ const PAGES = [
   ['26 Administracija › Koš', "menuGo('admin');S.asub='trash';render()"],
   ['27 Administracija › Povezave', "menuGo('admin');S.asub='conn';render()"],
   ['28 Administracija › Nastavitve', "menuGo('admin');S.asub='set';render()"],
+  ['29 Claude panel (v200)', "menuGo('objekti');aiOpen()"],
+  ['30 Plan › statistika za obdobje (v200)', "menuGo('plan');S.pv='w';S.stOd='2026-10-01';S.stDo='2026-10-31';render()"],
 ];
 
 async function shot(p, setup) {
+  await p.evaluate(() => { const a = document.getElementById('aip'); if (a) a.hidden = true; if (typeof S !== 'undefined') { S.stOd = null; S.stDo = null; } });
   if (setup) await p.evaluate(setup);
   await p.waitForTimeout(350);
   await p.evaluate(() => { const t = document.getElementById('toast'); if (t) t.classList.remove('on'); window.scrollTo(0, 0); });

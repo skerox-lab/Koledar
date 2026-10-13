@@ -1,6 +1,6 @@
 # Popravki prototipa v novi aplikaciji
 
-Samodejno ustvarjeno z `npm run build` iz `scripts/build-frontend.js`. To so VSE spremembe kode prototipa (v178, SHA-256 `d3d56bdaae2117169f988a500f0dbd8b03b84b7c5ae91593314747e65ee38123`). Vse ostalo je dobesedno enako.
+Samodejno ustvarjeno z `npm run build` iz `scripts/build-frontend.js`. To so VSE spremembe kode prototipa (v178, SHA-256 `681cc320424648f0a13617f36f9c267b8e37b7d5b31833b31d615c60ef0093df`). Vse ostalo je dobesedno enako.
 
 | # | Datoteka | Popravek | Zadetkov |
 |---|---|---|---|
@@ -32,12 +32,11 @@ Samodejno ustvarjeno z `npm run build` iz `scripts/build-frontend.js`. To so VSE
 | 26 | app.js | datoteke na strežniku namesto IndexedDB (fGet) | 1 |
 | 27 | app.js | datoteke na strežniku namesto IndexedDB (fDel) | 1 |
 | 28 | app.js | useObj: brez napake, če trenutnega objekta uporabnik ne vidi | 1 |
-| 29 | app.js | nova ponudba: vodja = prijavljeni uporabnik (dSave) | 1 |
-| 30 | app.js | nova ponudba: vodja = prijavljeni uporabnik (dSend) | 1 |
-| 31 | app.js | Administracija: Ponastavi geslo zares, dodan gumb Nastavi geslo | 1 |
-| 32 | app.js | PDEF (vzorčni podatki partnerjev) ne velja več, ko je vzorec odstranjen (npm run odstrani-vzorec) | 1 |
-| 33 | app.js | Naročnik: Enter brez puščice izbere prvi predlog (odločitev 9. 10. 2026, PREVERJANJE F1) | 1 |
-| 34 | app.js | Outlook skrit: okno v mapi Korespondenca | 1 |
-| 35 | app.js | Outlook skrit: Korespondenca (objekti brez vzorčne pošte) | 1 |
-| 36 | app.js | Outlook skrit: Korespondenca Šenčur | 1 |
-| 37 | app.js | RPARCH: arhiv cen s strežnika (samo direktor in administrator) | 1 |
+| 29 | app.js | Administracija: Ponastavi geslo zares, dodan gumb Nastavi geslo | 1 |
+| 30 | app.js | PDEF (vzorčni podatki partnerjev) ne velja več, ko je vzorec odstranjen (npm run odstrani-vzorec) | 1 |
+| 31 | app.js | Naročnik: Enter brez puščice izbere prvi predlog (odločitev 9. 10. 2026, PREVERJANJE F1) | 1 |
+| 32 | app.js | Outlook skrit: okno v mapi Korespondenca | 1 |
+| 33 | app.js | Outlook skrit: Korespondenca (objekti brez vzorčne pošte) | 1 |
+| 34 | app.js | Outlook skrit: Korespondenca Šenčur | 1 |
+| 35 | app.js | v200: trenutni uporabnik (skupine po vodjih, podpis PRIPRAVIL) = prijavljeni uporabnik; v razvojnem načinu kot v prototipu | 1 |
+| 36 | app.js | RPARCH: arhiv cen s strežnika (samo direktor in administrator) | 1 |

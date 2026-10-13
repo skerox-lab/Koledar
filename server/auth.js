@@ -6,7 +6,8 @@ const config = require('./config');
 const { q } = require('./db');
 
 // Vloge kot v prototipu (UROLES) → koda vloge v aplikaciji (S.role)
-const UROLES = ['vodja projekta', 'računovodstvo', 'direktor', 'administrator', 'administrator, vodja projekta'];
+// v200: kombinirana vloga »administrator, vodja projekta« je ukinjena (migracija v db.js)
+const UROLES = ['vodja projekta', 'računovodstvo', 'direktor', 'administrator'];
 function roleCode(role) {
   if (/administrator/.test(role)) return 'admin';
   if (role === 'direktor') return 'direktor';

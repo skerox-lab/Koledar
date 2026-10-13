@@ -79,12 +79,12 @@ sc('B1', 'Plan: Marko torek »wc 6 r-wc 2«', ['WC 6 R-WC 2'], async p => {
   const after = await p.evaluate(() => pRowH(PLAN.own[0], pDays()));
   return `celica: ${await cellVal(p, 'Marko tor 13')}\nΣ Marko: ${before} → ${after}\n` + line(await L.text(p), /Režijske|Opravljene/);
 });
-sc('B2', 'Plan: Luka torek »wc 6 r 2« (režija brez oznake)', ['bad', 'oznako objekta', 'brez oznake objekta'], async p => {
+sc('B2', 'Plan: Luka torek »wc 6 r 2« (režija brez oznake)', ['bad', 'oznako objekta'], async p => {
   await L.go(p, 'plan');
   await cell(p, 'Luka tor 13', 'wc 6 r 2');
   const t = await L.text(p);
   const i = t.indexOf('Režija brez oznake objekta');
-  return `celica: ${await cellVal(p, 'Luka tor 13')}\nslog: ${await cellStyle(p, 'Luka tor 13')}\nobvestilo: ${await toastText(p)}\nstatistika: ${i >= 0 ? t.slice(i, i + 40).replace(/\n/g, ' ') : '(ni kvadratka)'}`;
+  return `celica: ${await cellVal(p, 'Luka tor 13')}\nslog: ${await cellStyle(p, 'Luka tor 13')}\nobvestilo: ${await toastText(p)}\nstatistika: ${i >= 0 ? t.slice(i, i + 40).replace(/\n/g, ' ') : '(ni kvadratka – v200 točka 15)'}\n` + t.slice(t.indexOf('Po objektih'), t.indexOf('Po monterjih'));
 });
 sc('B3', 'Plan: »bolniška« → bela celica, Bolniške +1 dan', ['#FFFFFF', 'Bolniške\n1 dan · 8 ur'], async p => {
   await L.go(p, 'plan');
@@ -210,10 +210,10 @@ sc('E2', 'Dokumenti: mape 01–16 po abecedi, 04 Gradbena knjiga', ['01 Dobavite
   const t = await L.text(p, '#view .grid2 > div:first-child');
   return t;
 });
-sc('E3', 'Moji objekti: stolpec Izvedeno, brez Izid', ['Izvedeno'], async p => {
+sc('E3', 'Moji objekti: Pričetek del, Trajanje (mes.), Opombe; brez Izvedeno in Izid (popravek v200)', ['Pričetek del\tTrajanje (mes.)\tOpombe', 'Izid: ni', 'Izvedeno: ni'], async p => {
   await L.go(p, 'objekti');
   const h = await L.text(p, '#view table thead');
-  return h + '\nIzid: ' + (h.includes('Izid') ? 'je' : 'ni');
+  return h + '\nIzid: ' + (h.includes('Izid') ? 'je' : 'ni') + '\nIzvedeno: ' + (h.includes('Izvedeno') ? 'je' : 'ni');
 });
 sc('F1-2', 'Nova ponudba: predlogi naročnika »gra«, »kalc«', ['puščica + Enter: SGP Graditelj d.d. | Maistrova ulica 7, 1241 Kamnik', 'puščica + Enter: Kalcer d.o.o. | Ljubljanska cesta 51, 1236 Trzin | info@kalcer.si'], async p => {
   await p.evaluate(() => { menuGo('povp'); novaPonudba(); });
@@ -327,5 +327,7 @@ sc('X3', 'Izvozi poročil (direktor): Excel in PDF', ['.xlsx', '.pdf'], async p 
   o.push(await exp(p, 'Poročila PDF', () => { expRepP(); }));
   return o.join('\n');
 });
+
+require('./scenariji-200')(sc, { L, XLSX, pdfInfo, xlsxInfo, line, cell, cellVal, toastText, confirmAsk, writeTmp, reloadKeep });
 
 module.exports = { S, L };

@@ -92,6 +92,8 @@ CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
 `);
 
 const q = sql => db.prepare(sql);
+// v200: kombinirana vloga se pretvori v »administrator«
+db.exec("UPDATE users SET role='administrator', updated_at=datetime('now') WHERE role LIKE 'administrator,%'");
 function tx(fn) {
   db.exec('BEGIN IMMEDIATE');
   try { const r = fn(); db.exec('COMMIT'); return r; }

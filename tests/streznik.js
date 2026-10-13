@@ -54,7 +54,7 @@ async function run(browser, url) {
   await M.waitForSelector('#lgu'); await M.waitForTimeout(300);
   await M.fill('#lgu', 'matej@montaza-skerjanec.si'); await M.fill('#lgp', 'napacno-geslo');
   await M.click('#login button[type=submit]');
-  await M.waitForTimeout(400);
+  await M.waitForFunction(() => document.getElementById('toast').textContent.length > 0, null, { timeout: 10000 }).catch(() => { });
   ok('Napačno geslo je zavrnjeno', (await M.evaluate(() => document.getElementById('toast').textContent)).includes('Napačno'), await M.evaluate(() => document.getElementById('toast').textContent));
   await M.fill('#lgp', tMatej);
   await M.click('#login button[type=submit]');
@@ -127,6 +127,21 @@ async function run(browser, url) {
   const luka = await A.locator('input[aria-label="Luka sre 14"]').inputValue();
   ok('Hkratno urejanje v brskalniku: okno, osvežitev, vidi spremembo drugega', /spremenil drug uporabnik/.test(msg) && luka === 'HK 8' && !dialog, msg.split('\n')[0] + ' → po osvežitvi Luka sre 14 = ' + luka + (dialog ? ' (NEŽELENO vprašanje brskalnika)' : ''));
   await A2.context().close();
+
+  // 7c. v200: Claude skrit, vloge, vodja ponudbe določi strežnik
+  ok('v200: gumb Claude je v pravem načinu skrit (do odločitve o GDPR)', !(await A.locator('.top button.aibtn').isVisible()), 'viden: ' + (await A.locator('.top button.aibtn').isVisible()));
+  let us0 = (await api(adminCookie, 'api/state')).j.state.USERS;
+  r = await api(adminCookie, 'api/state', { method: 'PUT', body: { keys: { USERS: { v: us0.concat([['Test', 'test@montaza-skerjanec.si', 'administrator, vodja projekta', '', 'ni povezan']]), base: 0 } }, objs: {}, del: {} } });
+  ok('v200: kombinirane vloge »administrator, vodja projekta« strežnik ne sprejme', r.status === 400, r.status + ' ' + r.j.error);
+  let sv = await api(adminCookie, 'api/state');
+  const P0 = sv.j.state.POVP.map(x => Object.assign({}, x));
+  const tuja = P0[0]; const tujaV = tuja.vodja; tuja.vodja = 'Nekdo drug';
+  P0.unshift({ num: '0999/2026', nar: 'Test', proj: 'Test vodja', st: 'v pripravi', vodja: 'Nekdo drug' });
+  r = await api(adminCookie, 'api/state', { method: 'PUT', body: { keys: { POVP: { v: P0, base: sv.j.vers.keys.POVP } }, objs: {}, del: {} } });
+  sv = await api(adminCookie, 'api/state');
+  const nova = sv.j.state.POVP.find(x => x.num === '0999/2026'), stara = sv.j.state.POVP.find(x => x.num === tuja.num);
+  ok('v200: vodja nove ponudbe = prijavljeni (strežnik), pri obstoječi ostane', r.status === 200 && nova.vodja === 'Nejc' && stara.vodja === tujaV, `nova: ${nova.vodja}, obstoječa ${tuja.num}: ${stara.vodja} (prej ${tujaV})`);
+  await A.reload(); await A.waitForSelector('#view h1');
 
   // 8. administracija: sebe in zadnjega administratorja ni mogoče izbrisati
   const us = (await api(adminCookie, 'api/state')).j.state.USERS;

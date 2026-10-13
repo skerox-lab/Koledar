@@ -136,6 +136,13 @@ table.t tr.sum td{font-weight:600;border-bottom:none}
 @media (prefers-reduced-motion: reduce){.toast{transition:none}}
 .uiask{position:fixed;inset:0;background:rgba(10,20,30,.45);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px}.uiask-b{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:18px;max-width:460px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.3)}.uiask-i{width:100%;box-sizing:border-box;margin-bottom:12px}
 .pname{width:100%;min-width:0;font-size:12px;padding:5px 6px;border:1px solid var(--line);border-radius:4px;background:var(--panel)}
+.aibtn{background:#D97706;border-color:#D97706;color:#fff;font-weight:600}.aibtn:hover{background:#B45309;border-color:#B45309;color:#fff}
+.aip{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);background:var(--panel);border-left:1px solid var(--line);box-shadow:-8px 0 24px rgba(0,0,0,.12);z-index:50;display:flex;flex-direction:column}
+.aip[hidden]{display:none}.aih{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line)}.aih b{color:#B45309}
+.ailog{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}.aim{padding:9px 12px;border-radius:10px;white-space:pre-wrap;line-height:1.45;font-size:13.5px;max-width:92%}
+.aim.u{align-self:flex-end;background:var(--blue-bg);color:var(--ink)}.aim.a{align-self:flex-start;background:var(--panel2);color:var(--ink);border:1px solid var(--line)}.aim.e{align-self:flex-start;background:var(--warn-bg);color:var(--warn)}
+.aiin{border-top:1px solid var(--line);padding:10px 14px;display:flex;flex-direction:column;gap:6px}.aiin textarea{width:100%;resize:vertical;font:inherit}
+.grid5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}@media(max-width:900px){.grid5{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -154,6 +161,7 @@ table.t tr.sum td{font-weight:600;border-bottom:none}
       <div class="flex">
         <span class="sync" id="sync"><span class="dot"></span><span id="synctxt"></span></span>
         <button class="sm" id="olbtn" onclick="olToggle()"></button>
+        <button class="sm aibtn" onclick="aiOpen()" aria-label="Odpri Claude">✦ Claude</button>
         <button class="sm" onclick="prijavi()">Prijavi napako ali predlog</button>
         <button class="sm" onclick="MSD.logout()">Odjava</button>
       </div>
@@ -162,6 +170,7 @@ table.t tr.sum td{font-weight:600;border-bottom:none}
   </div>
 </div>
 <div class="toast" id="toast" role="status"></div>
+<aside id="aip" class="aip" aria-label="Claude" hidden><div class="aih"><b>✦ Claude</b><span style="flex:1"></span><button class="sm" onclick="aiClear()">Nov pogovor</button><button class="sm" onclick="aiClose()" aria-label="Zapri">✕</button></div><div id="ailog" class="ailog"></div><div class="aiin"><textarea id="aitxt" rows="3" placeholder="Vprašaj o objektih, urah, cenikih, ponudbah …" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiSend()}"></textarea><div class="flex" style="justify-content:space-between;align-items:center"><span class="small muted" id="aist"></span><span class="flex" style="gap:6px"><button class="sm" id="aistop" onclick="aiStop()" hidden>Ustavi</button><button class="sm aibtn" id="aigo" onclick="aiSend()">Pošlji</button></span></div></div></aside>
 <script src="vendor/xlsx.full.min.js"></script>
 <script src="vendor/html2canvas.min.js"></script>
 <script src="vendor/jspdf.umd.min.js"></script>

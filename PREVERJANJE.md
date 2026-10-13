@@ -70,7 +70,7 @@ v razvojnem načinu (podatki na strežniku, menjava vloge v glavi kot v prototip
 | D7 Osveži cenik z Excelom | pregled: prebrano 19, spremenjene 1, nove 1, odstranjene 1, Prej → Novo | enako | da |
 | E1 Šenčur | »48 % pogodbenih del«, »0 % po ponudbi 0533/2026«; po potrditvi postavke v situacijah pod »ponudba 0533/2026« (²) | enako | da |
 | E2 Dokumenti | 01 Dobavitelji … 04 Gradbena knjiga … 16 Zapisniki | enako | da |
-| E3 Moji objekti | stolpci Objekt, Vodja, Pogodba, Obračunano, Izvedeno; brez Izid | enako | da |
+| E3 Moji objekti | v178: stolpci Objekt, Vodja, Pogodba, Obračunano, Izvedeno; brez Izid. **Od v200** (popravek): Pričetek del, Trajanje (mes.), Opombe; brez Izvedeno in Izid | enako | da |
 | E4 Naložena dobavnica (dodatno) | strošek materiala 1.234,56, datoteka ostane | enako, datoteka na strežniku v `files/sencur/06/` | da |
 | F1 `gra` | predlog SGP Graditelj d.d. · Maistrova ulica 7, 1241 Kamnik; izbira s puščico + Enter | enako; **sam Enter izbere prvi predlog** (³) | da / namerno |
 | F2 `kalc` | Kalcer d.o.o. · info@kalcer.si | enako | da |

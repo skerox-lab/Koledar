@@ -1,6 +1,6 @@
 # Razlike od prototipa in kaj še ni narejeno
 
-Stanje 9. 10. 2026. Prototip v178 (SHA-256 `d3d56bda…e38123`).
+Stanje 13. 10. 2026. Prototip **v200** (SHA-256 `681cc320…0093df`), paket sprememb 1 prenesen.
 
 Testi so pokazali, da se nova aplikacija v **razvojnem načinu** do piksla in do številke ujema s prototipom:
 - 113 posnetkov zaslona (28 strani × 4 vloge + prijava);
@@ -32,7 +32,10 @@ Popoln seznam sprememb kode je v [`POPRAVKI-PROTOTIPA.md`](POPRAVKI-PROTOTIPA.md
 | 17 | Nova ponudba › Naročnik | sam Enter ne izbere predloga, potrebna je puščica dol + Enter | **sam Enter izbere prvi predlog**, puščice in klik delujejo kot prej | odločitev 9. 10. 2026 (PREVERJANJE F1) |
 | 18 | Naslov zavihka | »Montaža Škerjanec Digital · vzorec« | »Montaža Škerjanec Digital« | odločitev 9. 10. 2026 |
 | 19 | Outlook | gumb »Poveži Outlook« in stanje v glavi, poziv v Korespondenci (simulacija) | skrito, dokler povezava ni narejena; sporočila se dodajo ročno (.msg, .eml) | odločitev 9. 10. 2026: počakava z Outlookom |
-| 20 | Po `odstrani-vzorec` | – | vzorčni podatki partnerjev (PDEF) se ne prikazujejo več | SPECIFIKACIJA 1 |
+| 20 | Claude v aplikaciji (v200, točka 1) | gumb »✦ Claude« in panel; teče prek zmožnosti »sample« | **gumb skrit** do odločitve o GDPR; Claude API na strežniku še ni povezan | navodila paketa sprememb 1 |
+| 21 | Ime za skupine in podpis »PRIPRAVIL« (v200) | direktor/računovodstvo: ime iz vzorčnega seznama uporabnikov po vlogi | ime prijavljenega uporabnika | prava prijava |
+| 22 | Vodja ponudbe (v200, točka 21) | določi brskalnik | določi **strežnik**: nova ponudba = prijavljeni, pri obstoječi ostane | navodila paketa sprememb 1 |
+| 23 | Po `odstrani-vzorec` | – | vzorčni podatki partnerjev (PDEF) se ne prikazujejo več | SPECIFIKACIJA 1 |
 
 ## 2. Razlike, ki jih uporabnik ne vidi
 
@@ -46,6 +49,7 @@ Popoln seznam sprememb kode je v [`POPRAVKI-PROTOTIPA.md`](POPRAVKI-PROTOTIPA.md
 | Kaj | Stanje | Kaj potrebujem |
 |---|---|---|
 | Outlook (Microsoft Graph) | odloženo; v pravem načinu skrito (vrstica 19) | Azure račun obstaja. Potrebna je registracija aplikacije v Entra ID (Directory/tenant ID, Application/client ID, client secret, preusmeritveni naslov) in odločitev o GDPR za AI povzetke |
+| Claude v aplikaciji (v200) | gumb skrit | odločitev o GDPR: kateri podatki gredo v Claude API (imena objektov, naročniki, zneski, ure monterjev?). Nato: API ključ na strežniku in orodja (seznam_objektov, objekt_finance, ure_v_obdobju, isci_cenik, kalkulacija_sistema, ponudbe), ki berejo iz baze s pravicami |
 | Predlogi naročnika iz AJPES/FURS | iz znanih podatkov kot v prototipu | potrditev, da gremo na brezplačni seznam FURS; preveril bom format |
 | Bizi | samo povezava na kartici partnerja | odločitev o naročnini |
 | Izvoz VASCO | CSV kot v prototipu | primer uvozne datoteke iz VASCO |

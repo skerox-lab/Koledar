@@ -245,6 +245,8 @@ window.MSD = (function () {
     M.dev = !!s.dev;
     if (!M.dev) { // namesto spustnega seznama za menjavo vloge (samo razvojni način) ime prijavljenega
       const sel = document.getElementById('role');
+      // Claude v aplikaciji (v200, točka 1): skrit do odločitve o GDPR in povezave s Claude API na strežniku
+      document.querySelectorAll('.aibtn').forEach(el => { el.style.display = 'none'; });
       ['olbtn', 'sync'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; }); // Outlook še ni povezan
       if (sel) { sel.style.display = 'none'; if (s.user) { const n = document.createElement('span'); n.className = 'small'; n.style.fontWeight = '500'; n.textContent = s.user.name; sel.after(n); } }
     }

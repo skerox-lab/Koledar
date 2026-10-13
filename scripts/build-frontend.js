@@ -14,7 +14,7 @@ const crypto = require('crypto');
 
 const ROOT = path.join(__dirname, '..');
 const SRC = path.join(ROOT, 'prototip', 'index.html');
-const SHA256 = 'd3d56bdaae2117169f988a500f0dbd8b03b84b7c5ae91593314747e65ee38123';
+const SHA256 = '681cc320424648f0a13617f36f9c267b8e37b7d5b31833b31d615c60ef0093df'; // v200 (paket sprememb 1)
 
 const raw = fs.readFileSync(SRC);
 const sha = crypto.createHash('sha256').update(raw).digest('hex');
@@ -108,10 +108,6 @@ patch('app', 'datoteke na strežniku namesto IndexedDB (fDel)',
   "async function fDel(id){try{await MSD.fDel(id)}catch(x){}}");
 patch('app', 'useObj: brez napake, če trenutnega objekta uporabnik ne vidi',
   "OBJ[CUR].d=snap();const d=OBJ[id].d;", "if(OBJ[CUR])OBJ[CUR].d=snap();const d=OBJ[id].d;");
-patch('app', 'nova ponudba: vodja = prijavljeni uporabnik (dSave)',
-  "ddv:d.ddv,obj:d.obj,vodja:'Nejc',file:", "ddv:d.ddv,obj:d.obj,vodja:ME,file:");
-patch('app', 'nova ponudba: vodja = prijavljeni uporabnik (dSend)',
-  "vodja:S.role==='nejc'?'Nejc':'Nejc',", "vodja:ME,");
 patch('app', 'Administracija: Ponastavi geslo zares, dodan gumb Nastavi geslo',
   `<button class="sm" onclick="toast('Uporabnik \${r[0].replace(/'/g,'')} bo ob naslednji prijavi nastavil novo geslo')">Ponastavi geslo</button> `,
   `\${MSD.dev?\`<button class="sm" onclick="toast('Uporabnik \${r[0].replace(/'/g,'')} bo ob naslednji prijavi nastavil novo geslo')">Ponastavi geslo</button> \`:\`<button class="sm" onclick="MSD.pwReset(\${i})">Ponastavi geslo</button> <button class="sm" onclick="MSD.pwSet(\${i})">Nastavi geslo</button> \`}`);
@@ -134,6 +130,9 @@ patch('app', 'Outlook skrit: Korespondenca (objekti brez vzorčne pošte)',
 patch('app', 'Outlook skrit: Korespondenca Šenčur',
   'Outlook ni povezan, zato se pošta ne pripenja samodejno. <a style="cursor:pointer;text-decoration:underline" onclick="olToggle()">Poveži Outlook</a> ali shrani',
   '${MSD.dev?\'Outlook ni povezan, zato se pošta ne pripenja samodejno. <a style="cursor:pointer;text-decoration:underline" onclick="olToggle()">Poveži Outlook</a> ali shrani\':\'Shrani\'}');
+
+patch('app', 'v200: trenutni uporabnik (skupine po vodjih, podpis PRIPRAVIL) = prijavljeni uporabnik; v razvojnem načinu kot v prototipu',
+  "function curName(){usersInit();", "function curName(){if(!MSD.dev)return ME;usersInit();");
 
 // Arhiv cen za Poročila: podatek ostane na strežniku, dobita ga samo direktor in administrator.
 const mR = app.match(/const RPARCH=(\[.*?\]\]);/);

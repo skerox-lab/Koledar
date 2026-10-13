@@ -132,6 +132,14 @@ function mergeAppend(stored, incoming) {
   return incoming.filter(e => !seen.has(JSON.stringify(e))).concat(stored);
 }
 
+// v200 (točka 21): vodjo ponudbe določi strežnik. Nova ponudba dobi prijavljenega uporabnika,
+// pri obstoječi (ista številka) vodja ostane nespremenjen.
+function povpVodja(stored, incoming, user) {
+  if (!Array.isArray(incoming)) throw new HttpError(400, 'Napačni podatki');
+  const old = new Map((Array.isArray(stored) ? stored : []).filter(p => p && p.num).map(p => [p.num, p.vodja]));
+  return incoming.map(p => (p && typeof p === 'object') ? Object.assign({}, p, { vodja: old.has(p.num) ? old.get(p.num) : user.name }) : p);
+}
+
 // USERS (samo direktor/administrator): uskladi tabelo users s seznamom iz Administracije
 function syncUsers(c, rows) {
   if (!Array.isArray(rows)) throw new HttpError(400, 'Napačni podatki o uporabnikih');
@@ -214,7 +222,7 @@ function putState(user, body) {
       q('INSERT INTO changes(username,kind,key,ver,bytes) VALUES(?,?,?,?,?)').run(user.username, 'izbris objekta', id, row.ver, 0);
     }
     const ids = visibleObjIds(c);
-    for (const [k, { v, base }] of Object.entries(keys)) {
+    for (let [k, { v, base }] of Object.entries(keys)) {
       if (k === 'OBJ' || DATAK.includes(k) || k[0] === '_') continue;
       if (USER_KEYS.includes(k)) {
         q('INSERT INTO user_state(user_id,key,value) VALUES(?,?,?) ON CONFLICT(user_id,key) DO UPDATE SET value=excluded.value').run(user.id, k, JSON.stringify(v));
@@ -228,6 +236,7 @@ function putState(user, body) {
       }
       const row = q('SELECT value, ver, updated_by FROM state WHERE key=?').get(k);
       if ((row ? row.ver : 0) !== (base || 0)) { conflicts.push({ key: k, who: row && row.updated_by }); continue; }
+      if (!c.dev && k === 'POVP') v = povpVodja(row ? JSON.parse(row.value) : [], v, user);
       let nv = v;
       if (c.vodja && SCOPED[k]) nv = mergeScoped(SCOPED[k], row ? JSON.parse(row.value) : [], v, c, ids);
       else if (!c.boss && BOSS_ONLY_APPEND.includes(k)) nv = mergeAppend(row ? JSON.parse(row.value) : [], v);
