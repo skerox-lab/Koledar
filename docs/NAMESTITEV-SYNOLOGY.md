@@ -24,6 +24,9 @@ Priporočeno: vsaj 2 GB RAM. Aplikacija sama porabi približno 150 MB.
 
 ## 2. Zaženi
 
+> V `docker/msd` mora obstajati mapa **`data`** (je že v ZIP-u). Če je ni, jo ustvari v File Station, sicer Container Manager javi »Bind mount failed: '/volume1/docker/msd/data' does not exist«.
+
+
 1. **Container Manager › Projekt › Ustvari**.
 2. Ime projekta: `msd`. Pot: `/docker/msd`. Vir: **uporabi obstoječi docker-compose.yml**.
 3. **Naprej › Končano**. Synology zgradi in zažene aplikacijo (prvič traja nekaj minut).
